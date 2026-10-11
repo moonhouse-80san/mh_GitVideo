@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component version="1.0">
+	<title xml:lang="ko">Github 비디오 삽입</title>
+	<title xml:lang="en">Github Insert Video</title>
+	<version>1.0</version>
+	<date>2026-10-11</date>
+
+	<author email_address="80san@moonhouse.co.kr" link="https://moonhouse.co.kr/">
+		<name xml:lang="ko">팔공산</name>
+		<name xml:lang="en">80san</name>
+		<description xml:lang="ko">Github 비디오 주소(src)를 직접 입력해 정렬, 넓이, 자동재생을 지정하고 삽입합니다.</description>
+		<description xml:lang="en">Insert a video by entering its URL (src) directly, with alignment, width and autoplay options.</description>
+	</author>
+</component>

@@ -1,0 +1,63 @@
+@charset "UTF-8";
+div.xe_mobile {
+	display:none!important;
+}
+
+#popBody { padding: 10px 0; }
+
+.adminTable { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.adminTable th {
+	text-align: left;
+	padding: 7px 10px;
+	background: #f5f5f5;
+	border: 1px solid #ddd;
+	font-weight: 600;
+	white-space: nowrap;
+	vertical-align: top;
+}
+.adminTable td {
+	padding: 7px 10px;
+	border: 1px solid #ddd;
+	vertical-align: middle;
+}
+
+.inputTypeText {
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	padding: 4px 6px;
+	font-size: 13px;
+}
+
+/* 라디오를 가로로 나란히 배치하는 공통 그룹 */
+.mh_video_inline_group {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px 18px;
+}
+.mh_video_inline_group label {
+	white-space: nowrap;
+	font-weight: normal;
+	margin: 2px 0;
+}
+
+.mh_video_help_text {
+	margin-top: 4px;
+	font-size: 12px;
+	color: #999;
+}
+
+/* 버튼 영역 */
+.btnArea { padding: 10px 0 0; }
+.x_btn { display: inline-block; padding: 5px 14px; border-radius: 3px; border: 1px solid #bbb; background: #f5f5f5; cursor: pointer; font-size: 13px; text-decoration: none; color: #333; }
+.x_btn-primary { background: #3a7abf; color: #fff; border-color: #2e6da4; }
+.x_pull-right { float: right; }
+.x_clearfix::after { content: ''; display: block; clear: both; }
+
+@media (max-width: 520px) {
+	.adminTable, .adminTable tbody, .adminTable tr, .adminTable th, .adminTable td {
+		display: block;
+		width: auto !important;
+	}
+	.adminTable th { white-space: normal; border-bottom: none; }
+}

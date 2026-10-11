@@ -1,0 +1,84 @@
+<load target="./popup.js" />
+<load target="./popup.css" />
+<load target="../lang" />
+
+<div class="x_modal-header">
+	<h1>{$component_info->title} ver. {$component_info->version}</h1>
+	<a class="close_window" href="javascript:window.close()">&times;</a>
+</div>
+
+<div class="x_modal-body">
+	<form action="./" method="get" onSubmit="return false" id="fo"
+		data-msg-src-required="{$lang->msg_video_src_required}"
+		data-msg-src-invalid="{$lang->msg_video_src_invalid}"
+		data-msg-width-invalid="{$lang->msg_video_width_invalid}">
+
+	<div id="popBody">
+		<table cellspacing="0" class="adminTable">
+			<col width="110" />
+			<col />
+
+			<!-- 비디오 주소(src) -->
+			<tr>
+				<th scope="row">{$lang->video_src}</th>
+				<td>
+					<input type="text" id="video_src" class="inputTypeText" style="width:100%;box-sizing:border-box" placeholder="https://example.com/video.mp4" />
+					<div class="mh_video_help_text">{$lang->about_video_src}</div>
+				</td>
+			</tr>
+
+			<!-- 넓이 -->
+			<tr>
+				<th scope="row">{$lang->video_width}</th>
+				<td>
+					<input type="number" id="video_width" class="inputTypeText" value="640" min="1" style="width:100px" /> px
+					<div class="mh_video_help_text">{$lang->about_video_width}</div>
+				</td>
+			</tr>
+
+			<!-- 정렬 -->
+			<tr>
+				<th scope="row">{$lang->video_align}</th>
+				<td>
+					<div class="mh_video_inline_group">
+						<label><input type="radio" name="video_align" value="left" /> {$lang->video_align_left}</label>
+						<label><input type="radio" name="video_align" value="center" checked="checked" /> {$lang->video_align_center}</label>
+						<label><input type="radio" name="video_align" value="right" /> {$lang->video_align_right}</label>
+					</div>
+				</td>
+			</tr>
+
+			<!-- 자동재생 -->
+			<tr>
+				<th scope="row">{$lang->video_autoplay}</th>
+				<td>
+					<div class="mh_video_inline_group">
+						<label><input type="radio" name="video_autoplay" value="Y" checked="checked" /> {$lang->video_autoplay_y}</label>
+						<label><input type="radio" name="video_autoplay" value="N" /> {$lang->video_autoplay_n}</label>
+					</div>
+					<div class="mh_video_help_text">{$lang->about_video_autoplay}</div>
+				</td>
+			</tr>
+
+			<!-- 소리 -->
+			<tr>
+				<th scope="row">{$lang->video_sound}</th>
+				<td>
+					<div class="mh_video_inline_group">
+						<label><input type="radio" name="video_muted" value="N" checked="checked" /> {$lang->video_sound_on}</label>
+						<label><input type="radio" name="video_muted" value="Y" /> {$lang->video_sound_mute}</label>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="x_clearfix btnArea">
+		<div class="x_pull-right">
+			<a href="#" onclick="insertMhVideo(); return false;"><button type="button" class="x_btn x_btn-primary">{$lang->cmd_insert}</button></a>
+			<a class="x_btn" href="{getUrl('','module','editor','act','dispEditorComponentInfo','component_name',$component_info->component_name)}" target="_blank" onclick="window.open(this.href,'ComponentInfo','width=10,height=10');return false;">{$lang->about_component}</a>
+			<a href="#" onclick="window.close(); return false;"><button type="button" class="x_btn">{$lang->cmd_close}</button></a>
+		</div>
+	</div>
+	</form>
+</div>
