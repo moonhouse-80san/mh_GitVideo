@@ -30,6 +30,17 @@ function convertGithubUrl(src) {
 		'https://raw.githubusercontent.com/$1/$2/$3');
 }
 
+/* ── 구글 드라이브 공유 주소를 /preview 주소로 변환 (iframe 방식이라 자동재생/소리 옵션은 적용 안 됨) ── */
+function convertDriveUrl(src) {
+	var m = src.match(/^https?:\/\/drive\.google\.com\/(?:file\/(?:u\/\d+\/)?d\/|open\?(?:[^#]*&)?id=|uc\?(?:[^#]*&)?id=)([A-Za-z0-9_-]{10,})/i);
+	return m ? 'https://drive.google.com/file/d/' + m[1] + '/preview' : src;
+}
+
+function toggleDriveOptions() {
+	var is_drive = /^https:\/\/drive\.google\.com\/file\/d\/[A-Za-z0-9_-]+\/preview$/.test(get_by_id('video_src').value.trim());
+	jQuery('input[name="video_autoplay"], input[name="video_muted"]').prop('disabled', is_drive);
+}
+
 /* ── 에디터에서 기존 mh_GitVideo를 선택해 열었을 때(수정 모드) 값 복원 ── */
 function getMhVideo() {
 	// 부모창이 있는지 체크
@@ -68,7 +79,7 @@ function insertMhVideo() {
 	if (typeof(opener) == "undefined") return;
 
 	var $fo = jQuery('#fo');
-	var src = convertGithubUrl(get_by_id('video_src').value.trim());
+	var src = convertDriveUrl(convertGithubUrl(get_by_id('video_src').value.trim()));
 	get_by_id('video_src').value = src;
 	var width = get_by_id('video_width').value.trim();
 
@@ -125,9 +136,11 @@ function insertMhVideo() {
 
 jQuery(function($) {
 	getMhVideo();
+	toggleDriveOptions();
 
-	// 주소를 붙여넣고 입력창을 벗어나면 GitHub 주소를 바로 raw 주소로 바꿔서 보여줌
+	// 주소를 붙여넣고 입력창을 벗어나면 GitHub/구글 드라이브 주소를 바로 변환해서 보여줌
 	$('#video_src').on('change', function() {
-		this.value = convertGithubUrl(this.value.trim());
-	});
+		this.value = convertDriveUrl(convertGithubUrl(this.value.trim()));
+		toggleDriveOptions();
+	}).on('input', toggleDriveOptions);
 });

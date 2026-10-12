@@ -63,7 +63,10 @@ class mh_GitVideo extends EditorHandler
 		{
 			return '';
 		}
-		$video_info->src = htmlspecialchars($src, ENT_QUOTES, 'UTF-8');
+
+		// 구글 드라이브 공유 주소(file/d/ID/view, open?id=ID, uc?id=ID)는 /preview iframe 방식으로 출력 (src는 검증된 ID로 새로 만들어 안전)
+		$is_drive = preg_match('#^https?://drive\.google\.com/(?:file/(?:u/\d+/)?d/|open\?(?:[^\#]*&)?id=|uc\?(?:[^\#]*&)?id=)([A-Za-z0-9_-]{10,})#i', $src, $drive_match);
+		$video_info->src = htmlspecialchars($is_drive ? 'https://drive.google.com/file/d/'.$drive_match[1].'/preview' : $src, ENT_QUOTES, 'UTF-8');
 
 		$ext = strtolower(pathinfo((string)parse_url($src, PHP_URL_PATH), PATHINFO_EXTENSION));
 		$video_info->type_attr = isset($this->mime_types[$ext]) ? ' type="'.$this->mime_types[$ext].'"' : '';
@@ -83,7 +86,7 @@ class mh_GitVideo extends EditorHandler
 		Context::set('video_info', $video_info);
 
 		$tpl_path = $this->component_path.'tpl';
-		$tpl_file = 'display.html';
+		$tpl_file = $is_drive ? 'display_drive.html' : 'display.html';
 
 		$oTemplate = TemplateHandler::getInstance();
 		return $oTemplate->compile($tpl_path, $tpl_file);
