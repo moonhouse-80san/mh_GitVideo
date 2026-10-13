@@ -1,5 +1,3 @@
 <div class="mh_video mh_video_drive mh_video_align_{$video_info->align}" style="margin:10px 0;text-align:{$video_info->align};">
-	<div style="{$video_info->width_style}aspect-ratio:16/9;display:inline-block;vertical-align:top;">
-		<iframe src="{$video_info->src}" allowfullscreen loading="lazy" style="display:block;width:100%;height:100%;border:0;"></iframe>
-	</div>
+	<iframe src="{$video_info->src}" allowfullscreen style="display:inline-block;vertical-align:top;{$video_info->width_style}height:auto;aspect-ratio:16/9;min-height:416px;border:0;"></iframe>
 </div>

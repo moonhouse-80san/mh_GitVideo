@@ -16,6 +16,10 @@
 		<value xml:lang="ko"><![CDATA[구글 드라이브 공유 주소(drive.google.com/file/d/…/view)도 입력할 수 있습니다. 미리보기(iframe) 방식으로 재생되며 자동재생/소리 옵션은 적용되지 않습니다. 파일 공유는 "링크가 있는 모든 사용자"로 설정해야 합니다.]]></value>
 		<value xml:lang="en"><![CDATA[Google Drive share links (drive.google.com/file/d/…/view) are also accepted. They play in a preview iframe, so the autoplay/sound options do not apply. The file must be shared as "Anyone with the link".]]></value>
 	</item>
+	<item name="about_video_youtube">
+		<value xml:lang="ko"><![CDATA[유튜브 주소(youtube.com/watch?v=…, youtu.be/…, shorts)도 입력할 수 있습니다. iframe 방식으로 재생되며 자동재생/소리 옵션이 적용되고, 주소의 시작시간(t=90)도 유지됩니다.]]></value>
+		<value xml:lang="en"><![CDATA[YouTube links (youtube.com/watch?v=…, youtu.be/…, shorts) are also accepted. They play in an iframe, the autoplay/sound options apply, and the start time in the link (t=90) is kept.]]></value>
+	</item>
 	<item name="video_width">
 		<value xml:lang="ko"><![CDATA[넓이]]></value>
 		<value xml:lang="en"><![CDATA[Width]]></value>

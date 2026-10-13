@@ -66,7 +66,30 @@ class mh_GitVideo extends EditorHandler
 
 		// 구글 드라이브 공유 주소(file/d/ID/view, open?id=ID, uc?id=ID)는 /preview iframe 방식으로 출력 (src는 검증된 ID로 새로 만들어 안전)
 		$is_drive = preg_match('#^https?://drive\.google\.com/(?:file/(?:u/\d+/)?d/|open\?(?:[^\#]*&)?id=|uc\?(?:[^\#]*&)?id=)([A-Za-z0-9_-]{10,})#i', $src, $drive_match);
-		$video_info->src = htmlspecialchars($is_drive ? 'https://drive.google.com/file/d/'.$drive_match[1].'/preview' : $src, ENT_QUOTES, 'UTF-8');
+
+		// 소리는 기본 재생, 음소거(mh_muted=Y)는 옵션. (1.0 버전으로 삽입된 기존 글은 mh_muted가 없으므로 자동재생이면 음소거로 유지)
+		$autoplay = (($xml_obj->attrs->mh_autoplay ?? '') === 'Y');
+		$muted = isset($xml_obj->attrs->mh_muted) ? ($xml_obj->attrs->mh_muted === 'Y') : $autoplay;
+
+		// 유튜브 주소(watch?v=, youtu.be/, shorts/, embed/, live/)는 youtube-nocookie embed iframe으로 출력 (src는 검증된 ID 11자로 새로 만들어 안전)
+		// 자동재생/음소거 옵션과 주소의 시작시간(t=90, t=1m30s, start=90)을 그대로 반영
+		$is_youtube = preg_match('#^https?://(?:(?:www\.|m\.|music\.)?youtube(?:-nocookie)?\.com/(?:watch\?(?:[^\#]*&)?v=|embed/|shorts/|live/|v/)|youtu\.be/)([A-Za-z0-9_-]{11})#i', $src, $youtube_match);
+		if ($is_youtube)
+		{
+			$query = array('rel' => 0, 'playsinline' => 1);
+			if ($autoplay) $query['autoplay'] = 1;
+			if ($muted) $query['mute'] = 1;
+			if (preg_match('/[?&#](?:t|start)=(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?(?=[&#]|$)/i', $src, $time_match))
+			{
+				$start = (int)($time_match[1] ?? 0) * 3600 + (int)($time_match[2] ?? 0) * 60 + (int)($time_match[3] ?? 0);
+				if ($start > 0) $query['start'] = $start;
+			}
+			$youtube_src = 'https://www.youtube-nocookie.com/embed/'.$youtube_match[1].'?'.http_build_query($query);
+		}
+
+		if ($is_drive) $src = 'https://drive.google.com/file/d/'.$drive_match[1].'/preview';
+		elseif ($is_youtube) $src = $youtube_src;
+		$video_info->src = htmlspecialchars($src, ENT_QUOTES, 'UTF-8');
 
 		$ext = strtolower(pathinfo((string)parse_url($src, PHP_URL_PATH), PATHINFO_EXTENSION));
 		$video_info->type_attr = isset($this->mime_types[$ext]) ? ' type="'.$this->mime_types[$ext].'"' : '';
@@ -78,15 +101,12 @@ class mh_GitVideo extends EditorHandler
 		$align = (string)($xml_obj->attrs->mh_align ?? '');
 		$video_info->align = in_array($align, array('left', 'center', 'right'), true) ? $align : 'center';
 
-		// 소리는 기본 재생, 음소거(mh_muted=Y)는 옵션. (1.0 버전으로 삽입된 기존 글은 mh_muted가 없으므로 자동재생이면 음소거로 유지)
-		$autoplay = (($xml_obj->attrs->mh_autoplay ?? '') === 'Y');
-		$muted = isset($xml_obj->attrs->mh_muted) ? ($xml_obj->attrs->mh_muted === 'Y') : $autoplay;
 		$video_info->autoplay_attr = ($autoplay ? ' autoplay playsinline' : '').($muted ? ' muted' : '');
 
 		Context::set('video_info', $video_info);
 
 		$tpl_path = $this->component_path.'tpl';
-		$tpl_file = $is_drive ? 'display_drive.html' : 'display.html';
+		$tpl_file = $is_drive ? 'display_drive.html' : ($is_youtube ? 'display_youtube.html' : 'display.html');
 
 		$oTemplate = TemplateHandler::getInstance();
 		return $oTemplate->compile($tpl_path, $tpl_file);
